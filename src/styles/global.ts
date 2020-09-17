@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
 
 export default createGlobalStyle`
   * {
@@ -25,4 +25,27 @@ export default createGlobalStyle`
   h1,h2,h3,h4,h5,h6, strong {
     font-weight:500;
   }
+`;
+
+// Animação
+export const appearFromLeftAnimation = keyframes`
+from{
+  opacity: 0;
+  transform: translateX(-50px);
+}
+to{
+  opacity: 1;
+  transform: translateX(0);
+}
+`;
+
+export const appearFromRightAnimation = keyframes`
+from{
+  opacity: 0;
+  transform: translateX(50px);
+}
+to{
+  opacity: 1;
+  transform: translateX(0);
+}
 `;

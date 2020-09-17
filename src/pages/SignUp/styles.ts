@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signUpBackground from '../../assets/sing-up-background.png';
+import { appearFromRightAnimation } from '../../styles/global';
 
 export const Container = styled.div`
   /* maximo da tela horizontal */
@@ -31,6 +32,15 @@ export const Content = styled.div`
   /* ocupe o máximo da tela com no máximo 700px */
   width: 100%;
   max-width: 700px;
+`;
+
+export const AnimationContainer = styled.div`
+  /* ao lado do outro */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: ${appearFromRightAnimation} 1s;
 
   form {
     margin: 80px 0;

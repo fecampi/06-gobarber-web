@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signInBackground from '../../assets/sign-in-background.png';
+import { appearFromLeftAnimation } from '../../styles/global';
 
 export const Container = styled.div`
   /* maximo da tela horizontal */
@@ -31,6 +32,14 @@ export const Content = styled.div`
   /* ocupe o máximo da tela com no máximo 700px */
   width: 100%;
   max-width: 700px;
+`;
+
+export const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: ${appearFromLeftAnimation} 1s;
 
   form {
     margin: 80px 0;
@@ -72,7 +81,6 @@ export const Content = styled.div`
     }
   }
 `;
-
 export const Background = styled.div`
   /* igualmente distribuído entre todos os elementos(adaptar a imagem) */
   flex: 1;

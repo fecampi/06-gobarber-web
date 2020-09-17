@@ -6,10 +6,9 @@ interface TooltipProps {
   title: string;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ title, children }) => {
+const Tooltip: React.FC<TooltipProps> = ({ title }) => {
   return (
     <Container>
-      {children}
       <FiAlertCircle color="#c53030" size={20} />
       <span>{title}</span>
     </Container>
