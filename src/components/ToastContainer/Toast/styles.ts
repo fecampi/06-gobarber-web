@@ -3,7 +3,7 @@ import { animated } from 'react-spring';
 
 interface ContainerProps {
   type?: 'success' | 'error' | 'info';
-  hasdescription?: boolean;
+  hasDescription?: number;
 }
 
 // Variações para criar os toasts com cores diferentes
@@ -72,7 +72,7 @@ pega o type, se não existe pega o padrão */
 
   /* se ele nao tem descrição  */
   ${props =>
-    !!props.hasdescription &&
+    !!props.hasDescription &&
     css`
       align-itens: center;
 

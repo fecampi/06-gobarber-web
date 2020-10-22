@@ -37,7 +37,7 @@ const Toast: React.FC<ToastProps> = ({ message, style }) => {
     // style é para animação com a biblioteca react-spring
     <Container
       type={message.type}
-      hasdescription={!!message.description}
+      hasDescription={Number(!!message.description)}
       style={style}
     >
       {icons[message.type || 'info']}

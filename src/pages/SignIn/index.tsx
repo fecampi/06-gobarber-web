@@ -2,14 +2,14 @@ import React, { useCallback, useRef } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 
 import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/logo.svg';
-import getValidationErrors from '../../utils/getValidationErros';
+import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -22,6 +22,7 @@ const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   // Hooks utilizados(serve para compartilhar informações entre componentes)
+  const history = useHistory();
   const { signIn } = useAuth();
   const { addToast } = useToast();
 
@@ -42,6 +43,7 @@ const SignIn: React.FC = () => {
           email: data.email,
           password: data.password,
         });
+        history.push('/dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -57,7 +59,7 @@ const SignIn: React.FC = () => {
       }
     },
     // toda variável externa, precisa colocar na dependência[Hooks utilizados]
-    [signIn, addToast],
+    [signIn, history, addToast],
   );
 
   return (
@@ -75,7 +77,7 @@ const SignIn: React.FC = () => {
               placeholder="Senha"
             />
             <Button type="submit">Entrar</Button>
-            <a href="forgot">Esqueci minha senha</a>
+            <Link to="forgot-password">Esqueci minha senha</Link>
           </Form>
           <Link to="/signup">
             <FiLogIn />
