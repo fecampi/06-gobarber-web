@@ -6,7 +6,7 @@ import 'react-day-picker/lib/style.css';
 
 import { FiPower, FiClock } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import ptBR from 'date-fns/esm/locale/pt-BR/index';
+import ptBR from 'date-fns/locale/pt-BR';
 import {
   Container,
   Header,
@@ -24,6 +24,9 @@ import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 
+// useEffect - Executa a função assim que a variável mudar
+// useMemo - retorna um valor assim que a variável mudar
+// useCallback - retorna a função assim que a variável mudar
 interface MonthAvailabilityItem {
   day: number;
   available: boolean;
@@ -40,10 +43,11 @@ interface Appointment {
 }
 
 const Dashboard: React.FC = () => {
-  // Deslogar com o botão on
+  // Deslogar com o botão on/ user do usuário logado
   const { user, signOut } = useAuth();
-
+  // data calendário selecionado
   const [selectedDate, setSelectedDate] = useState(new Date());
+  // Mes calendário selecionado
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const [monthAvailability, setMonthAvailability] = useState<
@@ -53,6 +57,7 @@ const Dashboard: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
+    // se o dia estiver disponível pode ser clicado(desabilitado e dia da semana)
     if (modifiers.available && !modifiers.disabled) {
       setSelectedDate(day);
     }
@@ -62,6 +67,7 @@ const Dashboard: React.FC = () => {
     setCurrentMonth(month);
   }, []);
 
+  // disparar a função sempre que o mes for alterado
   useEffect(() => {
     api
       .get(`/providers/${user.id}/month-availability`, {
@@ -75,6 +81,7 @@ const Dashboard: React.FC = () => {
       });
   }, [currentMonth, user.id]);
 
+  // sempre que usuário clicou numa data
   useEffect(() => {
     api
       .get<Appointment[]>('/appointments/me', {
@@ -96,9 +103,13 @@ const Dashboard: React.FC = () => {
       });
   }, [selectedDate]);
 
+  // pegar os dias desativados em forma de array
+  // use memo para memorizar um valor especifico, e so alterar no currentMonth, monthAvailability
   const disabledDays = useMemo(() => {
     const dates = monthAvailability
+      // pegar os dias que estão em falso
       .filter(monthDay => monthDay.available === false)
+      // para cada um dos falses da api...converter na data
       .map(monthDay => {
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
@@ -109,28 +120,33 @@ const Dashboard: React.FC = () => {
     return dates;
   }, [currentMonth, monthAvailability]);
 
+  // pegar a data para o texto
   const selectedDateAsText = useMemo(() => {
     return format(selectedDate, "'Dia' dd 'de' MMMM", {
       locale: ptBR,
     });
   }, [selectedDate]);
 
+  // sempre que o dia da semana mudar
   const selectedWeekDay = useMemo(() => {
     return format(selectedDate, 'cccc', { locale: ptBR });
   }, [selectedDate]);
 
+  // pega os agendamentos da manha
   const morningAppointments = useMemo(() => {
     return appointments.filter(appointment => {
       return parseISO(appointment.date).getHours() < 12;
     });
   }, [appointments]);
 
+  // pega os agendamentos da tarde
   const afternoonAppointments = useMemo(() => {
     return appointments.filter(appointment => {
       return parseISO(appointment.date).getHours() >= 12;
     });
   }, [appointments]);
 
+  // primeiro agendamento depois da hora atual
   const nextAppointment = useMemo(() => {
     return appointments.find(appointment =>
       isAfter(parseISO(appointment.date), new Date()),
@@ -241,8 +257,11 @@ const Dashboard: React.FC = () => {
         <Calendar>
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
+            // so meses seguintes
             fromMonth={new Date()}
+            // desativar os dias do fds e os dias específicos
             disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
+            // adicionar classe css aos dias
             modifiers={{
               available: { daysOfWeek: [1, 2, 3, 4, 5] },
             }}

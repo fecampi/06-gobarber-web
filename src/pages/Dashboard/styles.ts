@@ -104,6 +104,7 @@ export const NextAppointment = styled.div`
     border-radius: 10px;
     margin-top: 24px;
     position: relative;
+    /* barra laranja */
     &::before {
       position: absolute;
       height: 80%;
@@ -154,6 +155,7 @@ export const Section = styled.section`
 export const Appointment = styled.div`
   display: flex;
   align-items: center;
+  /* somente é valido no que tiver depois */
   & + div {
     margin-top: 16px;
   }
