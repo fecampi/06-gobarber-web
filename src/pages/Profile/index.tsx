@@ -54,7 +54,7 @@ const Profile: React.FC = () => {
               then: Yup.string().required('Campo obrigatório'),
               otherwise: Yup.string(),
             })
-            .oneOf([Yup.ref('password'), null], 'Confirmação incorreta'),
+            .oneOf([Yup.ref('password'), undefined], 'Confirmação incorreta'),
         });
 
         await schema.validate(data, {
@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
 
         const response = await api.put('/profile', formData);
 
-        updateUser(response.data);
+        updateUser(response.data.user);
 
         history.push('/dashboard');
 
